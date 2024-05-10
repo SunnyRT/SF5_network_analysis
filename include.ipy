@@ -11,6 +11,7 @@ import math
 
 from network_def import *
 from wk1_1 import *
+from wk1_2 import *
 
 #######reload all modules every time before executing the typed python code#######
 %load_ext autoreload

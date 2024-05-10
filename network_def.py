@@ -10,13 +10,20 @@ class Network(object):
             # adjacency matrix <adj_m>.
          
         if adj_m is not None:
+            # Check that adjacency matrix must be square, symmetric, all diagonal terms = 0
             if adj_m.shape[0] != adj_m.shape[1]:
                 raise ValueError("Adjacency matrix must be square matrix.")
-            if num_nodes is not None and num_nodes != adj_m.shape[0]:
+            elif not np.all(np.diag(adj_m) == 0):
+                raise ValueError("Any node cannot have an edge with itsef.")
+            elif not np.allclose(adj_m, adj_m.T):
+                raise ValueError("Every edge must be reciprocal.")
+            # Check adjacency matrix shape is consistent with number of nodes
+            elif num_nodes is not None and num_nodes != adj_m.shape[0]:
                 raise ValueError("Inconsistent input for graph definition.")
-            self.adj_m = adj_m
-            self.num_nodes = adj_m.shape[0]
-            self.adj_ls = np.array([set(np.nonzero(self.adj_m[i])[0]) for i in range(self.num_nodes)])
+            else:
+                self.adj_m = adj_m
+                self.num_nodes = adj_m.shape[0]
+                self.adj_ls = np.array([set(np.nonzero(self.adj_m[i])[0]) for i in range(self.num_nodes)])
         
         elif num_nodes is not None:
             self.num_nodes = num_nodes
@@ -41,7 +48,8 @@ class Network(object):
         return [(i,j) for i in self.adj for j in self.adj[i] if i<j]
     
     def edge_count(self):
-        return np.count_nonzero(self.adj_m)
+        # Must divide by 2 to avoid repeated counts
+        return np.count_nonzero(self.adj_m) / 2
     
 
 # # Define network object with adjacency lists
