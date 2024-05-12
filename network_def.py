@@ -51,6 +51,8 @@ class Network(object):
         # Must divide by 2 to avoid repeated counts
         return np.count_nonzero(self.adj_m) / 2
     
+    #TODO: Edge & Degree distribution Pm, Pk ~ binomial distribution
+    
 
 # # Define network object with adjacency lists
 # class Network(object):

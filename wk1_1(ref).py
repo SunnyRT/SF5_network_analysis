@@ -1,3 +1,5 @@
+""" This version contains functions that perform on multiple values of p"""
+
 # import numpy as np
 # import matplotlib.pyplot as plt
 # from network_def import Network 
