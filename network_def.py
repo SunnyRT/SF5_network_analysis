@@ -42,7 +42,7 @@ class Network(object):
         self.adj_m[j][i] = 1
 
     def neighbors(self, i):
-        return self.adj[i]
+        return self.adj_ls[i]
     
     def edge_list(self):
         return [(i,j) for i in self.adj for j in self.adj[i] if i<j]
