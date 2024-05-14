@@ -5,8 +5,36 @@ from scipy.stats import binom
 from scipy.integrate import simps
 
 from network_def import Network 
-from wk1_1_naive_sampling import hist_plt
+from wk1_sampling import rm_graph_gen, rm_graph_gen2, rm_graph_gen3
 
+def edge_hist(num_runs, num_nodes, p, bins=30):
+    """Sample large number of runs of random graph G(n,p) and plot a histogram for number of edges m for each graph sample"""
+
+    # Generate random graphs 
+    rm_graphs = [rm_graph_gen(num_nodes,p) for k in range(num_runs)]
+    # Compute edge counts for each graph
+    m_ary = np.array([rm_graph.edge_count() for rm_graph in rm_graphs])
+
+    # Plot histograms for each p
+    hist_plt(m_ary, p)
+
+    return m_ary
+
+  
+def hist_plt(data, p, bins=30, show_plt = True):
+    """Plotting of histograms of given p and data of m"""
+
+    plt.hist(data, bins=bins, density=True, alpha=0.5, label=f"p={p:.1f}")
+    
+    # Add labels and title
+    plt.xlabel('Total number of edges m')
+    plt.ylabel('Frequency')
+    plt.title(f"Histograms of edges m for random graphs")
+    plt.legend()
+
+    if show_plt:
+        plt.show()
+    
 
 def hist_bino_plt(data, num_nodes, p):
 

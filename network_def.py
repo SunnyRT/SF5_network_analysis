@@ -3,12 +3,13 @@ import numpy as np
 # Define network object with implementation of numpy arrays
 class Network(object):
     def __init__(self, num_nodes=None, adj_m=None):
-        # 2 constructor through either number of nodes or adjacency matrix
+        # FIXME: 2 constructor through either number of nodes or adjacency matrix
+        # TODO: create a function convert a matrix into a network object
         # Attributes: 
             # number of nodes <num_nodes>; 
             # adjacency list <adj_ls>; 
             # adjacency matrix <adj_m>.
-         
+ 
         if adj_m is not None:
             # Check that adjacency matrix must be square, symmetric, all diagonal terms = 0
             if adj_m.shape[0] != adj_m.shape[1]:
@@ -51,8 +52,37 @@ class Network(object):
         # Must divide by 2 to avoid repeated counts
         return np.count_nonzero(self.adj_m) / 2
     
-    #TODO: Edge & Degree distribution Pm, Pk ~ binomial distribution
+    def find_comp(self, i):
+        """Find the component that contains node i for a given network object"""
+        c = set()
+        q = [i]
+        while len(q) > 0:
+            j = q.pop()
+            c.add(j)
+            q += self.neighbors(j) - c  # python type overloading
+        return c
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # # Define network object with adjacency lists
 # class Network(object):

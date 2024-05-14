@@ -1,24 +1,8 @@
 import numpy as np
-
+from matplotlib import pyplot as plt
 
 from network_def import Network
-from wk1_5_eff_sampling import *
-
-def comp_size(network):
-    """Compute the size of the component that 
-    contains node 1 for a given network object"""
-
-    comp_set = set()
-    def edge_follow(node):
-        for neighbour in network.neighbors(node):
-            if neighbour not in comp_set:
-                comp_set.add(neighbour)
-                # print(comp_set)
-                edge_follow(neighbour)
-                
-
-    edge_follow(0)
-    return len(comp_set)
+from wk1_sampling import rm_graph_gen2
 
 
 def comp_size_avg(num_nodes, p, num_trials=1):
@@ -28,14 +12,15 @@ def comp_size_avg(num_nodes, p, num_trials=1):
     mean_size = 0 
     for i in range(num_trials):
         network_i = rm_graph_gen2(num_nodes, p)
-        i_size = comp_size(network_i)
+        i_size = len(network_i.find_comp(0)) 
         mean_size = (i*mean_size + i_size) / (i+1)     
     
     return mean_size
 
 
+
 if __name__ =='__main__':
-    p_range = np.linspace(0,0.0004, 20)
+    p_range = np.linspace(0,0.001, 50)
     mean_sizes = np.empty(len(p_range), dtype=float)
     for i, p in enumerate(p_range):
         mean_sizes[i] = comp_size_avg(4096, p, num_trials=20)
@@ -53,3 +38,43 @@ if __name__ =='__main__':
 
         
 
+
+
+
+
+
+
+
+
+
+
+
+# Functions to compute component of individual sets have been integrated into Network class methods
+# ****************************************************************
+# # Self attempt 
+# # Time complexity is similar, but may be constrained by python recursion depth limit
+# def comp_size(network):
+#     """Compute the size of the component that 
+#     contains node 1 for a given network object"""
+
+#     comp_set = set()
+#     def edge_follow(node):
+#         for neighbour in network.neighbors(node):
+#             if neighbour not in comp_set:
+#                 comp_set.add(neighbour)
+#                 # print(comp_set)
+#                 edge_follow(neighbour)
+                
+#     edge_follow(0)
+#     return len(comp_set)
+
+# # Solution provided
+# def find_component(G, i):
+#     """Find the component that contains node i for a given network object"""
+#     c = set()
+#     q = [i]
+#     while len(q) > 0:
+#         j = q.pop()
+#         c.add(j)
+#         q += G.neighbors(j) - c  # python type overloading
+#     return c
