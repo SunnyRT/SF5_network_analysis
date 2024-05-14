@@ -5,13 +5,13 @@ from network_def import Network
 from wk1_sampling import rm_graph_gen2
 
 
-def comp_size_avg(num_nodes, p, num_trials=1):
+def comp_size_avg(n, p, num_trials=1):
     """Compute the average size of the component that 
     contains node 1 for a random network G(n, p)"""
 
     mean_size = 0 
     for i in range(num_trials):
-        network_i = rm_graph_gen2(num_nodes, p)
+        network_i = rm_graph_gen2(n, p)
         i_size = len(network_i.find_comp(0)) 
         mean_size = (i*mean_size + i_size) / (i+1)     
     
@@ -57,16 +57,16 @@ if __name__ =='__main__':
 #     """Compute the size of the component that 
 #     contains node 1 for a given network object"""
 
-#     comp_set = set()
-#     def edge_follow(node):
-#         for neighbour in network.neighbors(node):
-#             if neighbour not in comp_set:
-#                 comp_set.add(neighbour)
-#                 # print(comp_set)
-#                 edge_follow(neighbour)
+#     c = set()
+#     def edge_follow(i): # i represents node i
+#         for j in network.neighbors(i): # j represents neighbour node j of node i
+#             if j not in c:
+#                 c.add(j)
+#                 # print(c)
+#                 edge_follow(j)
                 
 #     edge_follow(0)
-#     return len(comp_set)
+#     return len(c)
 
 # # Solution provided
 # def find_component(G, i):

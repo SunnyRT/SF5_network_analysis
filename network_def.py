@@ -2,11 +2,11 @@ import numpy as np
 
 # Define network object with implementation of numpy arrays
 class Network(object):
-    def __init__(self, num_nodes=None, adj_m=None):
+    def __init__(self, n=None, adj_m=None):
         # FIXME: 2 constructor through either number of nodes or adjacency matrix
         # TODO: create a function convert a matrix into a network object
         # Attributes: 
-            # number of nodes <num_nodes>; 
+            # number of nodes <n>; 
             # adjacency list <adj_ls>; 
             # adjacency matrix <adj_m>.
  
@@ -19,18 +19,18 @@ class Network(object):
             elif not np.allclose(adj_m, adj_m.T):
                 raise ValueError("Every edge must be reciprocal.")
             # Check adjacency matrix shape is consistent with number of nodes
-            elif num_nodes is not None and num_nodes != adj_m.shape[0]:
+            elif n is not None and n != adj_m.shape[0]:
                 raise ValueError("Inconsistent input for graph definition.")
             else:
                 self.adj_m = adj_m
-                self.num_nodes = adj_m.shape[0]
-                self.adj_ls = np.array([set(np.nonzero(self.adj_m[i])[0]) for i in range(self.num_nodes)])
+                self.n = adj_m.shape[0]
+                self.adj_ls = np.array([set(np.nonzero(self.adj_m[i])[0]) for i in range(self.n)])
         
-        elif num_nodes is not None:
-            self.num_nodes = num_nodes
-            self.adj_ls = np.empty(num_nodes, dtype=object)
+        elif n is not None:
+            self.n = n
+            self.adj_ls = np.empty(n, dtype=object)
             self.adj_ls.fill(set())
-            self.adj_m = np.zeros((num_nodes,num_nodes), dtype = bool)
+            self.adj_m = np.zeros((n,n), dtype = bool)
         
         else:
             raise ValueError("Missing argument for graph definition.")
@@ -86,8 +86,8 @@ class Network(object):
 
 # # Define network object with adjacency lists
 # class Network(object):
-#     def __init__(self, num_nodes):
-#         self.adj = {i:set() for i in range(num_nodes)} # dictionary whcih map each node to a set of connected adjacent nodes
+#     def __init__(self, n):
+#         self.adj = {i:set() for i in range(n)} # dictionary whcih map each node to a set of connected adjacent nodes
 
 #     def add_edge(self, i, j):
 #         self.adj[i].add(j)
@@ -103,18 +103,18 @@ class Network(object):
 
 # # Alternative definition with adjency matrix (np array)
 # class Network_mat(object):
-#     def __init__(self, num_nodes):
-#         self.num_nodes = num_nodes
-#         self.adj = np.zeros((num_nodes,num_nodes), dtype = bool)
+#     def __init__(self, n):
+#         self.n = n
+#         self.adj = np.zeros((n,n), dtype = bool)
 
 #     def add_edge(self, i, j):
 #         self.adj[i][j] = 1
 #         self.adj[j][i] = 1
 
 #     def neighbors(self, i):
-#         # return [j for j in range(self.num_nodes) if self.adj[i][j]==1]
+#         # return [j for j in range(self.n) if self.adj[i][j]==1]
 #         return np.nonzero(self.adj[i])[0]
     
 #     def edge_list(self):
-#         return [(i,j) for i in range(self.num_nodes) for j in self.neighbors(i) if i<j]
+#         return [(i,j) for i in range(self.n) for j in self.neighbors(i) if i<j]
 

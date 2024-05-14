@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 from scipy.special import comb
 from network_def import Network 
 
-def rm_graph_gen(num_nodes, p, m_only=False):
+def rm_graph_gen(n, p, m_only=False):
     """Naive sample a random network G(n,p) from Bernoulli distribution with nodes n and success rate p.
     Time complexity: O(n^2)"""
 
-    adj_m = np.zeros((num_nodes, num_nodes), dtype=int)
-    for i in np.ndindex(num_nodes, num_nodes):
+    adj_m = np.zeros((n, n), dtype=int)
+    for i in np.ndindex(n, n):
         if i[0] < i[1]:
             adj_m[i] = np.random.binomial(1, p)
             
@@ -49,12 +49,12 @@ def rm_graph_gen2(n, p, m_only=False):
         return rm_graph
 
 
-def rm_graph_gen3(num_nodes, p, m_only=False):
+def rm_graph_gen3(n, p, m_only=False):
     """With built-in sampling library: np.random.binomial().
     Sample a random network G(n,p) from Bernoulli distribution with nodes n and success rate p.
     Time complexity: O(n^2)"""
 
-    adj_m_upper = np.random.binomial(1,p, size = (num_nodes, num_nodes))
+    adj_m_upper = np.random.binomial(1,p, size = (n, n))
     adj_m = np.triu(adj_m_upper) + np.triu(adj_m_upper,1).T
     # Remove self-connection edges
     np.fill_diagonal(adj_m, 0) 
