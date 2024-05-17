@@ -16,12 +16,12 @@ def edge_hist(num_runs, num_nodes, p, bins=30):
     m_ary = np.array([rm_graph.edge_count() for rm_graph in rm_graphs])
 
     # Plot histograms for each p
-    hist_plt(m_ary, p)
+    edge_hist_plt(m_ary, p)
 
     return m_ary
 
   
-def hist_plt(data, p, bins=30, show_plt = True):
+def edge_hist_plt(data, p, bins=30, show_plt = True):
     """Plotting of histograms of given p and data of m"""
 
     plt.hist(data, bins=bins, density=True, alpha=0.5, label=f"p={p:.1f}")
@@ -36,9 +36,9 @@ def hist_plt(data, p, bins=30, show_plt = True):
         plt.show()
     
 
-def hist_bino_plt(data, num_nodes, p):
+def edge_hist_bino_plt(data, num_nodes, p):
 
-    hist_plt(data, p, bins=30, show_plt = False)
+    edge_hist_plt(data, p, bins=30, show_plt = False)
 
 
     # Total possible paris of nodes

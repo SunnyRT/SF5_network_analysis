@@ -62,6 +62,9 @@ class Network(object):
             q += self.neighbors(j) - c  # python type overloading
         return c
     
+    def deg_dist(self):
+        return np.array([len(self.neighbors(i)) for i in range(self.n)])
+    
 
 
 

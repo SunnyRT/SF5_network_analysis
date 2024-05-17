@@ -14,6 +14,7 @@ from wk1_sampling import *
 from wk1_histogram_plot import *
 from wk1_6_complexity import *
 from wk1_7_component import *
+from wk2_1_config_model import *
 
 #######reload all modules every time before executing the typed python code#######
 %load_ext autoreload
