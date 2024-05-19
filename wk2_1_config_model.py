@@ -59,7 +59,7 @@ def deg_hist_plt(graph, dist, mean):
 
     plt.xlabel('Degree')
     plt.ylabel('Probability density function (i.e. normalized frequency)')
-    plt.title(f"Histograms of degree distribution for a given random graph")
+    plt.title(f"Histograms of degree distribution for a {dist} configured random graph")
     plt.legend()
     plt.show()
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     mean = 10
 
     while True:
-        dist = input("Enter 'poisson' or 'geo' for degree distribution ('exit' for quit): ")
+        dist = input("Enter 'poisson' or 'geo' for degree distribution ('exit'): ")
 
         if dist == 'poisson':
             k_ary = deg_dist_poisson(n, mean)
