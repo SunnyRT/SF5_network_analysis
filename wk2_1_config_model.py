@@ -26,7 +26,7 @@ def config_graph_gen(n, k_ary, m_only=False):
         rm_graph = Network(adj_m=adj_m)
         return rm_graph
 
-# FIXME: Check artefects of gaps in the histogram
+
 def deg_dist_poisson(n, mean):
     """Generate a degree array k_ary for n nodes from Poisson distribution with mean = lam."""
     lam = float(mean)
