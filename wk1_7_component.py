@@ -9,13 +9,13 @@ def comp_size_avg(n, p, num_trials=1):
     """Compute the average size of the component that 
     contains node 1 for a random network G(n, p)"""
 
-    mean_size = 0 
+    avg_size = 0 
     for i in range(num_trials):
         network_i = rm_graph_gen2(n, p)
-        i_size = len(network_i.find_comp(0)) 
-        mean_size = (i*mean_size + i_size) / (i+1)     
+        i_size = network_i.comp_size(0)
+        avg_size = (i*avg_size + i_size) / (i+1)     
     
-    return mean_size
+    return avg_size
 
 
 

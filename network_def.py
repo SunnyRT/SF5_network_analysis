@@ -62,6 +62,9 @@ class Network(object):
             q += self.neighbors(j) - c  # python type overloading
         return c
     
+    def comp_size(self,i):
+        return len(self.find_comp(i))
+    
     def deg(self,i):
         return np.array(len(self.neighbors(i)))
     
