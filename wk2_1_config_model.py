@@ -44,7 +44,7 @@ def deg_dist_geo(n,mean):
 def deg_hist_plt(graph, dist, mean):
     """Plotting of histograms of degree distribution of given graph"""
     degs = graph.deg_dist()
-    plt.hist(degs, bins=30, density=True, alpha=0.5, label="Graph degree distribution")
+    plt.hist(degs, bins=np.arange(np.max(degs))-0.5, density=True, alpha=0.5, label="Graph degree distribution")
 
     # Compute original distribution for comparison
     x = np.arange(0, max(degs)+1)
