@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from wk2_1_config_model import *
 
+from wk2_1_config_model import *
 from network_def import Network
 
 def comp_size_avg2(n, mean, dist, num_trials=1):

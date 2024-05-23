@@ -42,6 +42,12 @@ class Network(object):
         self.adj_m[i][j] = 1
         self.adj_m[j][i] = 1
 
+    def remove_edge(self, i, j):
+        self.adj_ls[i].remove(j)
+        self.adj_ls[j].remove(i)
+        self.adj_m[i][j] = 0
+        self.adj_m[j][i] = 0
+
     def neighbors(self, i):
         return self.adj_ls[i]
     

@@ -4,9 +4,8 @@ from wk2_1_config_model import *
 
 from network_def import Network
 
-def friend_deg_dist(graph, num_trials=10000, diff=False):
-    """sample the degree distribution of friends of a random node
-    if diff=True, return the difference between the degree of the friend and the degree of random node, delta"""
+def friend_deg_dist(graph, num_trials=10000):
+    """sample the degree distribution of friends of a random node"""
     n = graph.n
     friend_degs = np.zeros(num_trials)
     for idx in range(num_trials):
@@ -20,11 +19,8 @@ def friend_deg_dist(graph, num_trials=10000, diff=False):
         j = np.random.choice(list(friends_i))
         friend_degs[idx] = graph.deg(j)
         
-        if diff:
-            """Compute delta(i) = deg(j) - deg(i) for random friend j of random node i"""
-            friend_degs[idx] -= graph.deg(i)
     if 0 in friend_degs:
-        print("Zero degree found in friend degree distribution")
+        raise ValueError("Zero degree found in friend degree distribution")
     return friend_degs
 
 def i_j_deg_hist(graph):
