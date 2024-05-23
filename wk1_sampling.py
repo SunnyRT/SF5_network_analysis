@@ -37,11 +37,15 @@ def rm_graph_gen2(n, p, m_only=False):
         # i = np.random.randint(0, n-1)
         # j = np.random.randint(i+1, n)
 
-        # Correction: Uniform sampling of a pair of nodes (i,j)
-        # FIXME:!!!!!! From lecture
-        u, v = np.random.choice(n, 2, replace=False)
-        i = min(u,v)
+        # u, v = np.random.choice(n, 2, replace=False)
+        # i = min(u,v)
+        # j = max(u,v)
+
+        # Correction: Uniform sampling of a pair of nodes (i,j) from lecture        
+        u = np.random.randint(n-1) + 1
+        v = np.random.randint(n)
         j = max(u,v)
+        i = np.random.randint(j)
         # Connect the nodes (i,j) if not already connected
         if adj_m[i][j] == 0:
             adj_m[i][j] = 1

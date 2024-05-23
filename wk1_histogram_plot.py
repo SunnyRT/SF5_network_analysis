@@ -5,13 +5,13 @@ from scipy.stats import binom
 from scipy.integrate import simps
 
 from network_def import Network 
-from wk1_sampling import rm_graph_gen, rm_graph_gen2, rm_graph_gen3
+from wk1_sampling import rm_graph_gen2
 
 def edge_hist(num_runs, num_nodes, p):
     """Sample large number of runs of random graph G(n,p) and plot a histogram for number of edges m for each graph sample"""
 
     # Generate random graphs 
-    rm_graphs = [rm_graph_gen(num_nodes,p) for _ in range(num_runs)]
+    rm_graphs = [rm_graph_gen2(num_nodes,p) for _ in range(num_runs)]
     # Compute edge counts for each graph
     m_ary = np.array([rm_graph.edge_count() for rm_graph in rm_graphs])
 
@@ -23,8 +23,8 @@ def edge_hist(num_runs, num_nodes, p):
   
 def edge_hist_plt(data, p, show_plt = True):
     """Plotting of histograms of given p and data of m"""
-
-    plt.hist(data, bins=np.arange(np.max(data))-0.5, density=True, alpha=0.5, label=f"p={p:.1f}")
+    bins = np.arange(np.min(data), np.max(data)+1)-0.5
+    plt.hist(data, bins=bins, density=True, alpha=0.5, label=f"p={p:.1f}")
     
     # Add labels and title
     plt.xlabel('Total number of edges m')

@@ -14,8 +14,8 @@ def time_compare():
     t_ary_2 = np.empty(len(n_ary))
     for i, n in enumerate(n_ary):
         p = 10/(n-1)
-        t_ary_1[i] = timeit.timeit(lambda: rm_graph_gen(n, p, True), number=10)
-        t_ary_2[i] = timeit.timeit(lambda: rm_graph_gen2(n, p, True), number=10)
+        t_ary_1[i] = timeit.timeit(lambda: rm_graph_gen(n, p, True), number=100)
+        t_ary_2[i] = timeit.timeit(lambda: rm_graph_gen2(n, p, True), number=100)
     print("time for naive sampling algorithm:")
     print(t_ary_1)
     print(f"time for 2-stage algorithm:")
