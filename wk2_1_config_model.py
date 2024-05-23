@@ -59,7 +59,7 @@ def deg_hist_plt(graph, dist, mean):
 
     plt.xlabel('Degree')
     plt.ylabel('Probability density function (i.e. normalized frequency)')
-    plt.title(f"Histograms of degree distribution for a {dist} configured random graph")
+    # plt.title(f"Histograms of degree distribution for a {dist} configured random graph")
     plt.legend()
     plt.show()
 

@@ -24,11 +24,11 @@ def comp_size_avg2(n, mean, dist, num_trials=1):
 
 if __name__ =='__main__':
     n = 1000
-    mean_len = 11
+    mean_len = 21
     mean_ary = np.linspace(0, 2, mean_len)
     comp_size_poisson = np.zeros(mean_len)
     comp_size_geo = np.zeros(mean_len)
-    avg_trials = 10
+    avg_trials = 100
 
     for idx, mean in enumerate(mean_ary):
         print("processiong: mean = ", mean)

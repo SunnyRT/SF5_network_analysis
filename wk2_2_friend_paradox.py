@@ -51,12 +51,24 @@ def i_j_deg_hist(graph):
 
 # wk2_3
 def delta_hist(graph):
-    """Plotting histograms of difference between degree of random node i and its friends j"""
+    """Plotting histograms of difference between degree of random node i and average of its friends' degrees"""
     plt.figure()
-    delta_dist = friend_deg_dist(graph, diff=True)
+    n = graph.n
+    delta_dist = []
+    for i in range(n):
+        friends_i = graph.neighbors(i)
+        if friends_i: # only consider nodes with at least one friend
+            k_i = graph.deg(i)
+            kappa_i = np.mean([graph.deg(j) for j in friends_i])
+            delta_i = kappa_i - k_i
+            delta_dist.append(delta_i)
+
     bins = np.arange(np.min(delta_dist), np.max(delta_dist))-0.5
     plt.hist(delta_dist, bins=bins, density=True, alpha=0.5, label="delta distribution")
     plt.axvline(np.mean(delta_dist), color='blue', linestyle='dashed', linewidth=2, label=f'delta mean: {np.mean(delta_dist):.2f}')
+    plt.xlabel('Δ (i.e. mean degree of friends - degree)')
+    plt.ylabel('Probability density function (i.e. normalized frequency)')
+    plt.title(f"Histograms of delta distribution for a {dist} configured random graph")
     plt.legend()
     plt.show()
 
