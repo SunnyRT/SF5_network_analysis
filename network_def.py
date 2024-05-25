@@ -3,13 +3,6 @@ import numpy as np
 # Define network object with implementation of numpy arrays
 class Network(object):
     def __init__(self, n=None, adj_m=None):
-        # FIXME: 2 constructor through either number of nodes or adjacency matrix
-        # TODO: create a function convert a matrix into a network object
-        # Attributes: 
-            # number of nodes <n>; 
-            # adjacency list <adj_ls>; 
-            # adjacency matrix <adj_m>.
- 
         if adj_m is not None:
             # Check that adjacency matrix must be square, symmetric, all diagonal terms = 0
             if adj_m.shape[0] != adj_m.shape[1]:
@@ -50,6 +43,7 @@ class Network(object):
 
     def neighbors(self, i):
         return self.adj_ls[i]
+
     
     def edge_list(self):
         return [(i,j) for i in self.adj for j in self.adj[i] if i<j]
