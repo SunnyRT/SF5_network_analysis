@@ -46,7 +46,7 @@ class Network(object):
 
     
     def edge_list(self):
-        return [(i,j) for i in self.adj for j in self.adj[i] if i<j]
+        return [(i,j) for i in range(self.n) for j in self.adj_ls[i] if i<j]
     
     def edge_count(self):
         # Must divide by 2 to avoid repeated counts
