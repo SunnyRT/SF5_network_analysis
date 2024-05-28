@@ -60,12 +60,34 @@ if __name__ == "__main__":
     mu = np.mean(output, axis=0)
     cov = np.std(output, axis=0) / mu
         
-    plt.figure()
-    plt.plot(lambda_ary, mu, "o-", label="Mean")
-    plt.plot(lambda_ary, cov, "o-", label="Coefficient of variation")
-    plt.xlabel("Transmission rate")
-    plt.ylabel("Predicted number of total infections")
-    plt.legend()
+    # plt.figure()
+    # plt.plot(lambda_ary, mu, "o-", label="Mean")
+    # plt.plot(lambda_ary, cov, "o-", label="Coefficient of variation")
+    # plt.xlabel("Transmission rate")
+    # plt.ylabel("Predicted number of total infections")
+    # plt.legend()
+    # plt.show()
+
+
+    fig, ax1 = plt.subplots()
+
+    # Plot data on the first y-axis
+    ax1.plot(lambda_ary, mu, "o-", label="Mean")
+    ax1.set_xlabel('Transmission rate')
+    ax1.set_ylabel("Mean")
+    ax1.tick_params(axis='y', labelcolor='tab:blue')
+
+    # Create the second y-axis
+    ax2 = ax1.twinx()
+    ax2.plot(lambda_ary, cov, "o-", label="Coefficient of variation")
+    ax2.set_ylabel("Coefficient of variation")
+    ax2.tick_params(axis='y', labelcolor='tab:orange')
+
+    # Add legends
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
+
+    # Show the plot
     plt.show()
 
 

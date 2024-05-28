@@ -10,7 +10,7 @@ from wk3_1_SIR import *
 
 
 
-# Updated version such that each sampling takes place on one particular graph
+# Updated version such that each sampling takes place on one particular graph (sufficient:))
 def SIR_Nr_lam(network, seed_n, lambda_ary, iter_n=10):
     """Plot the average number of recovered nodes (i.e. Total infection counts) 
     at the end of the SIR process against the transmission rate lambda."""
