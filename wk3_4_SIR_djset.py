@@ -39,26 +39,27 @@ if __name__ == "__main__":
     mu = np.zeros(len(lambda_ary)) # Mean of the number of total infections mu over lambda
     cov = np.zeros(len(lambda_ary)) # coefficient of variation of the number of total infections sigma / mu over lambda
 
-    # edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
-    # for idx, lambda_ in enumerate(lambda_ary):
-    #     print("processing lambda: ", lambda_)
-    #     cluster_size = np.zeros(iter_n)
-    #     for itn in range(iter_n):
-    #         print("iter: ", itn, '/', iter_n, end='\r')
-    #         cluster_size[itn] = SIR_djset(edge_ls, lambda_)
-    #     mu[idx] = np.mean(cluster_size)
-    #     cov[idx] = np.std(cluster_size) / mu[idx]
+    # Generate one single network and calculate the number of total infections for each lambda
+    edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
+    for idx, lambda_ in enumerate(lambda_ary):
+        print("processing lambda: ", lambda_)
+        cluster_size = np.zeros(iter_n)
+        for itn in range(iter_n):
+            print("iter: ", itn, '/', iter_n, end='\r')
+            cluster_size[itn] = SIR_djset(edge_ls, lambda_)
+        mu[idx] = np.mean(cluster_size)
+        cov[idx] = np.std(cluster_size) / mu[idx]
 
-    # Generate a new network for each iteration, and calculate the number of total infections for each lambda
-    output = np.zeros((iter_n, len(lambda_ary))) # Store the number of total infections for each iteration and each lambda
-    for itn in range(iter_n):
-        print("iter: ", itn, '/', iter_n)
-        edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
-        for lam_i, lambda_ in enumerate(lambda_ary):
-            output[itn, lam_i] = SIR_djset(edge_ls, lambda_)
+    # # Generate a new network for each iteration, and calculate the number of total infections for each lambda
+    # output = np.zeros((iter_n, len(lambda_ary))) # Store the number of total infections for each iteration and each lambda
+    # for itn in range(iter_n):
+    #     print("iter: ", itn, '/', iter_n)
+    #     edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
+    #     for lam_i, lambda_ in enumerate(lambda_ary):
+    #         output[itn, lam_i] = SIR_djset(edge_ls, lambda_)
 
-    mu = np.mean(output, axis=0)
-    cov = np.std(output, axis=0) / mu
+    # mu = np.mean(output, axis=0)
+    # cov = np.std(output, axis=0) / mu
         
     # plt.figure()
     # plt.plot(lambda_ary, mu, "o-", label="Mean")

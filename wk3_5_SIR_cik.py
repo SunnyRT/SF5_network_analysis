@@ -19,13 +19,22 @@ def SIR_cik(n, edge_ls, single_node = False):
     # cluster size containing node i in [0,n) after going through k edges in [0,m]
     ci_k = np.zeros((m,n)) 
     for k, edge in enumerate(edge_ls):
+        ci_k_ary = np.zeros(n) # store the cluster size of each node after going through k edges
         C.merge(edge[0], edge[1])
 
-        for i in range(n):
-            ci_k[k,i] = C.subset_size(i)
+        for subset in C.subsets():
+            subset_size = len(subset)
+            if subset_size == n: # if the subset is the whole network, then break
+                ci_k[k:] = n*np.ones((m-k,n))
+                break
+            ci_k_ary[subset] = subset_size
+        ci_k[k] = ci_k_ary       
+
+        print(f"edge {k+1}/{m} done: ci_k = {ci_k[k]}")
 
     # inital cluster size is 1 for each seed node (i.e. concatenate with a row of 1s)
     ci_k = np.concatenate((np.ones((1,n)), ci_k), axis=0) 
+    print("shape of ci_k:", ci_k.shape)
 
     if single_node: # take the column of the matrix that corresponds to the seed node
         # shape(m+1,1)
@@ -39,7 +48,8 @@ def SIR_bino_coeff(edge_ls, lambda_ary):
     
     m = edge_ls.shape[0] # Total number of edges
     k_ary = np.arange(m+1) # number of edges infected
-    bino_coeff = np.empty(len(lambda_ary), dtype=object) # store the binomial coefficients for each lambda
+    lam_n = len(lambda_ary) # number of lambda values
+    bino_coeff = np.zeros((lam_n, m+1)) # store the binomial coefficients for each lambda
     for idx, lambda_ in enumerate(lambda_ary):
         bino_coeff[idx] = binom.pmf(k_ary, m, lambda_) # shape(lam_n, m+1)
     
@@ -71,22 +81,59 @@ if __name__ == "__main__":
     output = np.empty(iter_n, dtype=object) # Store the number of total infections for each iteration and each lambda
     # generate one single network for all iterations
     edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
-    for itn in range(iter_n):
-        print("iter: ", itn, '/', iter_n)
-        edge_ls = np.random.permutation(edge_ls) # shuffle the edge list
-        output[itn] = SIR_ci_lambda(n, edge_ls, lambda_ary, single_node = True).reshape(1,-1)
-    
-    # Compute mean and coefficient of variation over all iterations
-    mu = np.mean(output, axis=0)
-    cov = np.std(output, axis=0) / mu
-        
-
     
     
-
+    # Run for one iteration only, take mean and cov over all nodes
+    edge_ls = np.random.permutation(edge_ls) # generate an edge list
+    output= SIR_ci_lambda(n, edge_ls, lambda_ary) # output shape (lam_n, n)
+    print("output matrix:", output) 
+    # Compute mean and coefficient of variation over all nodes
+    mu = np.mean(output, axis=1)        # shape (lam_n,)
+    cov = np.std(output, axis=1) / mu   # shape (lam_n,)
+    
+    print("mu:", mu)
+    print("cov:", cov)
     plt.figure()
     plt.errorbar(lambda_ary, mu, yerr=cov, fmt='o')
     plt.xlabel("Transmission rate")
     plt.ylabel("Average number of total infections")
     plt.savefig("wk3_5_SIR_cik.png")
-    plt.show()
+    plt.show()    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # for itn in range(iter_n):
+    #     print("iter: ", itn, '/', iter_n)
+    #     edge_ls = np.random.permutation(edge_ls) # shuffle the edge list
+    #     output[itn] = SIR_ci_lambda(n, edge_ls, lambda_ary) # output shape (iter_n, lam_n, n)
+    #     print("output matrix:", output[itn]) # shape (lam_n, n)
+    
+
+        
+    # # Compute mean and coefficient of variation over all iterations
+    # mu = np.mean(output, axis=0)        # shape (lam_n, n)
+    # cov = np.std(output, axis=0) / mu   # shape (lam_n, n)
+        
+
+    # print("mu:", mu.shape)
+    # print("cov:", cov.shape)
+    
+    # # Write the output to a text file
+    # f = open('wk3_5_SIR_cik.txt', mode='a')
+    # for itn in range(iter_n):
+    #     f.write(f'Iteration {itn+1}:\n')
+    #     f.write(f'Output matrix: {output[itn]}.\n')
+
+    # f.write(f'Mean of the number of total infections mu over lambda: {mu}.\n')
+    # f.write(f'Coefficient of variation of the number of total infections sigma / mu over lambda: {cov}.\n')
+    # f.close()
+
