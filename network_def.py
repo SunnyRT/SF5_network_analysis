@@ -41,6 +41,7 @@ class Network(object):
         self.adj_m[i][j] = 0
         self.adj_m[j][i] = 0
 
+
     def neighbors(self, i):
         return self.adj_ls[i]
 

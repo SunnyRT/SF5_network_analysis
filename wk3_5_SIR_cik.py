@@ -83,7 +83,7 @@ if __name__ == "__main__":
     edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
     
     
-    # Run for one iteration only, take mean and cov over all nodes
+    # TODO: Run for one iteration only, take mean and cov over all nodes
     edge_ls = np.random.permutation(edge_ls) # generate an edge list
     output= SIR_ci_lambda(n, edge_ls, lambda_ary) # output shape (lam_n, n)
     print("output matrix:", output) 

@@ -17,7 +17,7 @@ from wk3_2_crit_thres import compute_s_prob
 
 
 # Simulation to calculate the dynamic centrality (solve by iteration)
-def centrality_ary_si(network, lambda_, iter_n=100):
+def centrality_ary_si(network, lambda_):
     """Compute the dynamic centrality of each node in the network 
     by xi = 1-si."""
     
@@ -27,9 +27,11 @@ def centrality_ary_si(network, lambda_, iter_n=100):
     return xi_ary 
 
 
+
+
 if __name__ == "__main__":
     n = 10000
-    mean = 10
+    mean = 20
 
     # Generate a random network
 
