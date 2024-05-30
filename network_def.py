@@ -72,6 +72,14 @@ class Network(object):
     def deg_dist(self):
         return np.array([self.deg(i) for i in range(self.n)])
     
+    def remove_nodes(self, i_ary):
+        """Remove nodes with index from i_ary and create a new network object.
+        Create a new copy of network object with nodes removed."""
+        mask = np.ones(self.n, dtype=bool)
+        mask[i_ary] = False
+        new_adj_m = self.adj_m[mask][:, mask]
+
+        return Network(adj_m=new_adj_m)   
 
 
 

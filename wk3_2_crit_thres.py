@@ -47,7 +47,7 @@ def compute_s_prob(network, lambda_, tol=1e-6, max_iter=1000):
             log_terms = np.log(1 - lambda_ + s_j * lambda_)
             s[i] = np.exp(np.sum(log_terms))
 
-    return s
+    return s # shape (n,)
 
 def crit_lambda(network):
     A = network.adj_m

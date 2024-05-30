@@ -37,7 +37,7 @@ def vaccine_edgels(edge_ls, v, n, vacc_friend=False):
     if not vacc_friend:
         nodes_to_remove = nodes_chosen
     else:
-        nodes_to_remove = sample_friend_to_remove(edge_ls, nodes_chosen, n)
+        nodes_to_remove = sample_friends_to_remove(edge_ls, nodes_chosen, n)
     
     # Create a mask to keep edges where neither node is removed
     mask = np.isin(edge_ls, nodes_to_remove)
@@ -47,22 +47,26 @@ def vaccine_edgels(edge_ls, v, n, vacc_friend=False):
     updated_edge_ls = edge_ls[mask]
     
     print(updated_edge_ls.shape)
-    print(f"Removed {n_remove} nodes ({v*100:.2f}%) from the network.")
+    print(f"Removed {len(nodes_to_remove)} nodes ({v*100:.2f}%) from the network.")
     return updated_edge_ls
 
 
 
 
-def sample_friend_to_remove(edge_ls, nodes_chosen, n):
+def sample_friends_to_remove(edge_ls, nodes_chosen, n):
     """Sample the set of randomly nominated friends to vaccinate."""
     adj_ls = edge_to_adj_ls(edge_ls, n)
     friends_to_remove = []
     for i in nodes_chosen:
-        if len(adj_ls[i]) > 0: # if the node has friends
-            friend_chosen = np.random.choice(list(adj_ls[i]))
-            friends_to_remove.append(friend_chosen)
+        # if the node no friends, skip and resample
+        while len(adj_ls[i]) == 0:
+            i = np.random.choice(n)
+        
+        friend_chosen = np.random.choice(list(adj_ls[i]))
+        friends_to_remove.append(friend_chosen)
 
     return friends_to_remove
+
 
 def edge_to_adj_ls(edge_ls, n):
     """Convert edge list to adjacency list."""
@@ -75,51 +79,45 @@ def edge_to_adj_ls(edge_ls, n):
 
 
 
-if __name__=="__main__":
-        
+if __name__ == '__main__':
+    """ Vaccination of nodes at rate lambda = 0.0, 0.2, 0.4."""
     n = 10000
     mean = 20
     v_ary = [0.0, 0.2, 0.4]
     colorscheme = ['r', 'b', 'g']
+
     lam_ary = np.linspace(0, 0.3, 30)
-    avg_n = 100
+    avg_n = 1000
 
-
-    # generate one single network edge list
+        # generate one single network edge list
     edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
 
     # run simulations for each vaccination rate
     outputs_nodes = np.empty(len(v_ary), dtype=object)
-    outputs_friends = np.empty(len(v_ary), dtype=object)
-
 
     for idx, v in enumerate(v_ary):
         print(f"Processing vaccination rate: {v}")
         if v == 0.0: # no vaccination
             edge_ls_vi = edge_ls 
-            output_nodes = SIR_ci_lambda(n, edge_ls_vi, lam_ary, avg_n, compute_mean=True) # output shape (lam_n,)
-            outputs_nodes[idx] = output_nodes
-            outputs_friends[idx] = output_nodes
-        
         
         else:
             edge_ls = np.random.permutation(edge_ls) # reshuffle the edge list
             edge_ls_vi = vaccine_edgels(edge_ls, v, n) # remove edges connected to vaccinated nodes
-            edge_ls_vj = vaccine_edgels(edge_ls, v, n, vacc_friend=True) # remove edges connected to nominated friends
 
-            output_nodes = SIR_ci_lambda(n, edge_ls_vi, lam_ary, avg_n, compute_mean=True) # output shape (lam_n,)
-            output_friends = SIR_ci_lambda(n, edge_ls_vj, lam_ary, avg_n, compute_mean=True) # output shape (lam_n,)
+        output_nodes = SIR_ci_lambda(n, edge_ls_vi, lam_ary, avg_n, compute_mean=True) # output shape (lam_n,)
+        outputs_nodes[idx] = output_nodes
 
-            outputs_nodes[idx] = output_nodes
-            outputs_friends[idx] = output_friends
         
     # outputs shape (v_n, lam_n)
     # plot the results
     plt.figure()
     for idx, v in enumerate(v_ary):
-        plt.plot(lam_ary, outputs_nodes[idx], "o-", color=colorscheme[idx], label=f"Vaccination rate: {v}")
-        plt.plot(lam_ary, outputs_friends[idx], "o--", color=colorscheme[idx], label=f"Vaccination rate: {v} (vaccinate friends)")
+        plt.plot(lam_ary, outputs_nodes[idx], "o-", color = colorscheme[idx], label=f"v={v} (nodes)")
     plt.xlabel("Transmission rate")
     plt.ylabel("Average number of total infections")
     plt.legend()
     plt.show()
+
+
+
+
