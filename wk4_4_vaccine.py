@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from wk2_1_config_model import *
-from wk4_xi import *
+from wk4_1_xi import *
 from wk3_4_SIR_djset import config_graph_edge_ls
 from wk3_5_SIR_cik import SIR_ci_lambda
 

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from wk2_1_config_model import *
-from wk4_xi import *
+from wk4_1_xi import *
 
 
 def friend_centrality(network, xi_ary):

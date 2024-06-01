@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from wk2_1_config_model import *
-from wk4_vaccine import *
+from wk4_4_vaccine import *
 
 
 def compute_s_prob_adjls(edge_ls, lambda_, n, tol=1e-6, max_iter=1000):
