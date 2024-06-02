@@ -17,7 +17,7 @@ def config_graph_edge_ls(n, k_ary):
     return edge_ls
 
 
-def SIR_djset(edge_ls, lambda_):
+def SIR_djset(n, edge_ls, lambda_):
     """Simulate the SIR model on the given network represented by disjoint set.
     Assume single seed node to be node 0."""
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
         cluster_size = np.zeros(iter_n)
         for itn in range(iter_n):
             print("iter: ", itn, '/', iter_n, end='\r')
-            cluster_size[itn] = SIR_djset(edge_ls, lambda_)
+            cluster_size[itn] = SIR_djset(n, edge_ls, lambda_)
         mu[idx] = np.mean(cluster_size)
         cov[idx] = np.std(cluster_size) / mu[idx]
 
