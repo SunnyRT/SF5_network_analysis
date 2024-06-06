@@ -117,7 +117,7 @@ if __name__ == "__main__":
     n = 4096
     mean = 10 # mean degree
     lambda_ary = np.linspace(0.00, 0.5, 26)
-    avg_n = 1
+    avg_n = 1000
     mu_p = np.zeros(len(lambda_ary)) # Mean of the number of total infections mu over lambda
     mu_g = np.zeros(len(lambda_ary)) 
     cov_p = np.zeros(len(lambda_ary)) # coefficient of variation of the number of total infections sigma / mu over lambda
@@ -141,14 +141,31 @@ if __name__ == "__main__":
     mu_g = np.mean(output_g, axis=1)        # shape (lam_n,)
     cov_g = np.std(output_g, axis=1) / mu_g   # shape (lam_n,)
     
-    print("mu:", mu)
-    print("cov:", cov)
-    plt.figure()
-    plt.errorbar(lambda_ary, mu, yerr=cov, fmt='o')
-    plt.xlabel("Transmission rate")
-    plt.ylabel("Average number of total infections")
-    plt.savefig("wk3_5_SIR_cik.png")
-    plt.show()    
+    print("mu:", mu_p)
+    print("cov:", cov_p)
+    fig, ax1 = plt.subplots()
+
+    # Plot data on the first y-axis
+    ax1.plot(lambda_ary, mu_p, "o-", color = 'tab:blue', label="p: μ")
+    ax1.plot(lambda_ary, mu_g, "^-", color = 'tab:orange', label="p: μ")
+    ax1.set_xlabel('Transmission rate')
+    ax1.set_ylabel("Mean")
+    ax1.tick_params(axis='y')
+
+    # Create the second y-axis
+    ax2 = ax1.twinx()
+    ax2.plot(lambda_ary, cov_p, "--", color = 'tab:blue', label="p: cov")
+    ax2.plot(lambda_ary, cov_g, "--", color = 'tab:orange', label="p: cov")
+    ax2.set_ylabel("Coefficient of variation")
+    ax2.tick_params(axis='y')
+
+    # Add legends
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
+
+    # Show the plot
+    plt.show()
+
 
     
     
