@@ -120,6 +120,7 @@ def SIR_djset_mask(n, edge_ls, lambda_, mask_states, w):
     # Randomly assign infection outcome to each edge based on lambda_edges (i.e., probability of weighted infection for each edge)
     # Flip the biased coin for each edge to determine if the edge is infected
     infect_edges = np.random.binomial(1, lambda_edges)
+    infect_edges = np.random.rand(len(lambda_edges)) < lambda_edges
 
     # add each directed edge to network_dir based on the infection outcome
     for idx, edge in enumerate(edge_ls_double):

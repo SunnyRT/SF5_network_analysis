@@ -21,8 +21,7 @@ class Network(object):
         
         elif n is not None:
             self.n = n
-            self.adj_ls = np.empty(n, dtype=object)
-            self.adj_ls.fill(set())
+            self.adj_ls = np.array([set() for _ in range(n)], dtype=object)
             self.adj_m = np.zeros((n,n), dtype = bool)
         
         else:
@@ -98,7 +97,7 @@ class Network_dir(object): # Directed network object
     def __init__(self, n):
         self.n = n
         self.adj_ls = np.empty(n, dtype=object)
-        self.adj_ls.fill(set())
+        self.adj_ls = np.array([set() for _ in range(n)], dtype=object)
         self.adj_m = np.zeros((n,n), dtype = bool)
 
     def add_edge(self, i, j): # From i to j
@@ -135,6 +134,7 @@ class Network_dir(object): # Directed network object
         q = [i]
         while len(q) > 0:
             j = q.pop()
+
             c.add(j)
             q += self.neighbors_sink(j) - c
 
