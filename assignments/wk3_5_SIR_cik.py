@@ -29,7 +29,7 @@ def SIR_cik(n, edge_ls, avg_n=100):
 
 
         for i in range(avg_n):
-            print("index:", i)
+            # print(f"index:{i}/{avg_n}\r", )
             ci_k_ary[i] = C.subset_size(i)
             if ci_k_ary[i] == n:
                 ci_k[k:] = n*np.ones((m-k,avg_n), dtype=np.int32)

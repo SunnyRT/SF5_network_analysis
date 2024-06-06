@@ -68,13 +68,15 @@ def SIR_djset_dir(n, edge_ls, lambda_nodes, compute_var=False, iter_n=1):
     var_size = None
     if compute_var:
         var_size = np.var(cluster_sizes)
-    # return the mean cluster size of each node if being the seed node
-    return mean_size, var_size
+        # return the mean cluster size of each node if being the seed node
+        return mean_size, var_size
+    else:
+        return mean_size
 
 
 
 
-def SIR_djset_mask(n, edge_ls, lambda_, mask_states, w):
+def SIR_djset_mask(n, edge_ls, lambda_, mask_states, w, avg_n=None):
     """ For a single, fixed lambda value, run the SIR process on a network based on mask wearing 
     and return the average size of the final cluster.
 
@@ -129,8 +131,16 @@ def SIR_djset_mask(n, edge_ls, lambda_, mask_states, w):
         
     print("Edges infected: ", network_dir.edge_count())
 
-    cluster_size = network_dir.sink_size(0) # assume the seed node is node 0
-    return cluster_size
+    if avg_n is None:
+        cluster_size = network_dir.sink_size(0) # assume the seed node is node 0
+        return cluster_size
+    else:
+        cluster_sizes = np.zeros(avg_n)
+        for i in range(avg_n):
+            cluster_sizes[i] = network_dir.sink_size(i)
+        
+        mean_size = np.mean(cluster_sizes)
+        return mean_size
     
 
 

@@ -11,7 +11,7 @@ from wk3_5_SIR_cik import SIR_ci_lambda
 
 def time_compare():
     # run both algorithms to generate G(n, 10/(n-1)) with n = 64, 128, ..., 1024 nodes
-    n_ary = np.array([2**i for i in range(6, 13)])
+    n_ary = np.array([2**i for i in range(6, 11)])
     lambda_ary = np.array([0.2])
     lambda_ = 0.2
 
@@ -29,9 +29,10 @@ def time_compare():
     for i, n in enumerate(n_ary):
         network = config_graph_gen(n, deg_dist_poisson(n, n/64))
         edge_ls = np.array(network.edge_list())
-        t_ary_1[i] = timeit.timeit(lambda: SIR_Nr_lam(network, 1, lambda_ary, iter_n = n), number=100)
+        t_ary_1[i] = n* timeit.timeit(lambda: SIR_Nr_lam(network, 1, lambda_ary, iter_n = 1), number=100)
         t_ary_2[i] = timeit.timeit(lambda: SIR_djset(n, edge_ls, lambda_), number=100)
         t_ary_3[i] = timeit.timeit(lambda: SIR_ci_lambda(n, edge_ls, lambda_ary, avg_n=1, compute_mean=False), number=100)
+
     print("time for naive simulation algorithm:")
     print(t_ary_1)
     print(f"time for disjoint set algorithm:")
