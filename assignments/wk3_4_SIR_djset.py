@@ -31,6 +31,23 @@ def SIR_djset(n, edge_ls, lambda_):
 
     return C.subset_size(0) # Assume node 0 is the seed node
 
+
+def SIR_djsets(n, edge_ls, lambdas, iter_n=1, compute_cov=False):
+    """Simulate the SIR model on the given network represented by disjoint set for multiple lambda values."""
+    cluster_size_means = np.zeros(len(lambdas))
+    cluster_size_cov = np.zeros(len(lambdas))
+    for idx, lambda_ in enumerate(lambdas):
+        cluster_sizes = np.zeros(iter_n)
+        for itn in range(iter_n):
+            cluster_sizes[itn] = SIR_djset(n, edge_ls, lambda_)
+        cluster_size_means[idx] = np.mean(cluster_sizes)
+        if compute_cov:
+            cluster_size_cov[idx] = np.std(cluster_sizes) / cluster_size_means[idx]
+            return cluster_size_means, cluster_size_cov
+    return cluster_size_means # shape (len(lambdas),)
+
+
+
 if __name__ == "__main__":
     n = 10000
     mean = 20
@@ -41,14 +58,15 @@ if __name__ == "__main__":
 
     # Generate one single network and calculate the number of total infections for each lambda
     edge_ls = config_graph_edge_ls(n, deg_dist_poisson(n, mean))
-    for idx, lambda_ in enumerate(lambda_ary):
-        print("processing lambda: ", lambda_)
-        cluster_size = np.zeros(iter_n)
-        for itn in range(iter_n):
-            print("iter: ", itn, '/', iter_n, end='\r')
-            cluster_size[itn] = SIR_djset(n, edge_ls, lambda_)
-        mu[idx] = np.mean(cluster_size)
-        cov[idx] = np.std(cluster_size) / mu[idx]
+    # for idx, lambda_ in enumerate(lambda_ary):
+    #     print("processing lambda: ", lambda_)
+    #     cluster_size = np.zeros(iter_n)
+    #     for itn in range(iter_n):
+    #         print("iter: ", itn, '/', iter_n, end='\r')
+    #         cluster_size[itn] = SIR_djset(n, edge_ls, lambda_)
+    #     mu[idx] = np.mean(cluster_size)
+    #     cov[idx] = np.std(cluster_size) / mu[idx]
+    mu, cov = SIR_djsets(n, edge_ls, lambda_ary, iter_n, compute_cov=True)
 
     # # Generate a new network for each iteration, and calculate the number of total infections for each lambda
     # output = np.zeros((iter_n, len(lambda_ary))) # Store the number of total infections for each iteration and each lambda

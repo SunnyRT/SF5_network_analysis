@@ -74,14 +74,77 @@ def SIR_djset_dir(n, edge_ls, lambda_nodes, compute_var=False, iter_n=1):
 
 
 
+def SIR_djset_mask(n, edge_ls, lambda_, mask_states, w):
+    """ For a single, fixed lambda value, run the SIR process on a network based on mask wearing 
+    and return the average size of the final cluster.
+
+    Assume single seed node to be any node and average final cluster size over all nodes."""
+
+    w_s, w_i, w_b = w
+
+    # create a double edge list which counts each edge twice in both directions.
+    # switch the two columns of the edge list to get the reverse edge list.
+    edge_ls_reverse = np.flip(edge_ls, axis=1)
+    # concatenate the two edge lists to get the double edge list.
+    edge_ls_double = np.concatenate((edge_ls, edge_ls_reverse), axis=0)
+
+    # create a Network_dir object with no edges
+    network_dir = Network_dir(n)
 
 
 
+    # Assign weight value to each edge based on the mask wearing state of the source node 
+    # (single direction only)
+    w_edges = np.ones(edge_ls.shape[0])
+    for idx, edge in enumerate(edge_ls):
+        state_i = mask_states[edge[0]] # source node
+        state_j = mask_states[edge[1]] # sink node
+
+        if state_i == 0:
+            if state_j == 0:
+                pass
+            else:
+                w_edges[idx] = w_s # only susceptible sink node is wearing a mask
+        else:
+            if state_j == 0:
+                w_edges[idx] = w_i # only infected source node is wearing a mask
+            else:
+                w_edges[idx] = w_b # both nodes are wearing masks
+
+    # Account for both directions of the edge
+    w_edges = np.concatenate((w_edges, swap_i_j(w_edges, w_s, w_i))) # shape (2*m,)
+
+    # Weighted lambda value for each edge
+    lambda_edges = lambda_ * w_edges
+
+    # Randomly assign infection outcome to each edge based on lambda_edges (i.e., probability of weighted infection for each edge)
+    # Flip the biased coin for each edge to determine if the edge is infected
+    infect_edges = np.random.binomial(1, lambda_edges)
+
+    # add each directed edge to network_dir based on the infection outcome
+    for idx, edge in enumerate(edge_ls_double):
+        if infect_edges[idx] == 1:
+            network_dir.add_edge(edge[0], edge[1])
+        
+    print("Edges infected: ", network_dir.edge_count())
+
+    cluster_size = network_dir.sink_size(0) # assume the seed node is node 0
+    return cluster_size
+    
 
 
+def swap_i_j(w_edges, w_s, w_i):
+    """Swap the weight values of the edges based on the source and sink node mask wearing states."""
+    if w_s == w_i:
+        return w_edges
+    
+    else:
+        w_reverse = w_edges.copy()
 
+        w_reverse[w_edges == w_s] = w_i
+        w_reverse[w_edges == w_i] = w_s
 
-
+    return w_reverse
 
 
 
